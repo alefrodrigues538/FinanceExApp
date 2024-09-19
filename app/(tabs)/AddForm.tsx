@@ -17,7 +17,7 @@ import {
 const AddForm = () => {
   const [checked, setChecked] = useState<boolean>(false);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {/* HEADER */}
       <View style={styles.headerContainer}>
         <View style={styles.headerInner}>
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     minHeight: Dimensions.get("window").height - 170,
     padding: 12,
     gap: 12,
+    backgroundColor: "#f8f8f8",
   },
 });
 
