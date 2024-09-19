@@ -35,8 +35,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <View style={{ marginTop: Constants.default.statusBarHeight, flex: 1 }}>
-        <StatusBar translucent />
+      <View
+        style={{
+          marginTop: Constants.default.statusBarHeight,
+          flex: 1,
+        }}
+      >
+        <StatusBar translucent backgroundColor="#1A73E8" />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

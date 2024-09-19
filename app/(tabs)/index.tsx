@@ -1,5 +1,6 @@
 import Card from "@/components/Card";
 import CardItem from "@/components/CardItem";
+import FloatButton from "@/components/FloatButton";
 import HorizontalCalendarCarousel from "@/components/HorizontalCalendarCarousel";
 import Paragraph from "@/components/Paragraph";
 import { FormatValue } from "@/utils/functions";
@@ -132,6 +133,10 @@ export default function HomeScreen() {
           />
         </Card>
       </ScrollView>
+      <FloatButton
+        href={"AddForm"}
+        icon={<Entypo name="plus" size={24} color={"white"} />}
+      />
     </View>
   );
 }
@@ -139,6 +144,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F8F8F8",
   },
   headerContainer: {
     backgroundColor: "#1A73E8",
