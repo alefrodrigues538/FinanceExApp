@@ -103,7 +103,8 @@ const HorizontalCalendarCarousel = () => {
                 style={[
                   styles.dateText,
                   {
-                    color: selected ? "#222" : "#666",
+                    color: selected ? "#FFF" : "#FFF9",
+                    borderColor: "#FFF",
                     borderBottomWidth: selected ? 2 : 0,
                   },
                 ]}
