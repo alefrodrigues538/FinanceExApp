@@ -15,6 +15,7 @@ interface ButtonProps extends TouchableOpacityProps {
   variation?: "primary" | "secondary";
   rounded?: boolean;
   roundedValue?: number;
+  full?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
@@ -41,6 +42,7 @@ const Button = (props: ButtonProps) => {
         {
           backgroundColor: variation[props.variation || "primary"],
           borderRadius: props.rounded ? props.roundedValue || 150 : 0,
+          width: props.full ? "100%" : "auto",
         },
       ]}
     >

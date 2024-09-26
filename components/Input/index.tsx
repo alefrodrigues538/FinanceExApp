@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   TextInput,
   TextInputProps,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from "react-native";
 import Animated, {
@@ -11,16 +13,22 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import Modal from "../Modal";
 
 interface InputProps extends TextInputProps {
   label?: string;
   containerStyle?: ViewStyle;
+  picker?: boolean;
+  pickerContentLayout?: ReactNode;
+  pickerTitle?: string;
 }
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 const Input = (props: InputProps) => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const InputRef = useRef<TextInput>(null);
   const [value, setValue] = useState<string>("");
   const fontSize = useSharedValue(14);
@@ -62,16 +70,25 @@ const Input = (props: InputProps) => {
 
     InputRef.current.focus();
   }
+
+  useEffect(() => {
+    if (props.value) {
+      triggerAnimation(true);
+    } else {
+      triggerAnimation(false);
+    }
+  }, [props.value]);
   return (
     <AnimatedTouchableOpacity
       activeOpacity={0.8}
-      style={[props.containerStyle, styles.container, ContainerAnimatedStyle]}
-      onPress={FocusInput}
+      style={[styles.container, ContainerAnimatedStyle, props.containerStyle]}
+      onPress={() => (props.picker ? setOpenModal(true) : FocusInput)}
     >
       <Animated.Text style={[styles.labelText, InputAnimatedStyle]}>
         {props.label}
       </Animated.Text>
       <TextInput
+        editable={!props.picker}
         ref={InputRef}
         {...props}
         style={[props.style, styles.input]}
@@ -87,8 +104,20 @@ const Input = (props: InputProps) => {
         }}
         onChangeText={(text) => {
           setValue(text);
+          props.onChangeText && props.onChangeText(text);
           return text;
         }}
+      />
+      {props.picker && (
+        <View style={styles.pickerTouchable}>
+          <AntDesign name="caretdown" size={12} color="#999" />
+        </View>
+      )}
+      <Modal
+        open={openModal}
+        children={props.pickerContentLayout}
+        onClose={() => setOpenModal(false)}
+        title={props.pickerTitle}
       />
     </AnimatedTouchableOpacity>
   );
@@ -107,9 +136,18 @@ const styles = StyleSheet.create({
   },
   input: {
     height: "100%",
-    width: "100%",
+    width: "95%",
     paddingLeft: 12,
     bottom: -2,
+  },
+  pickerTouchable: {
+    position: "absolute",
+    right: 0,
+    top: 8,
+    height: 24,
+    width: 24,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

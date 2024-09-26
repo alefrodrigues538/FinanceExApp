@@ -3,6 +3,8 @@ import Checkbox from "@/components/CheckBox";
 import Input from "@/components/Input";
 import Paragraph from "@/components/Paragraph";
 import RadioButton from "@/components/RadioButton";
+import { ExpenseType } from "@/interfaces/expenses";
+import { RevenueType } from "@/interfaces/revenues";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -14,8 +16,33 @@ import {
   View,
 } from "react-native";
 
+type AddFormType = {
+  name: string;
+};
+
 const AddForm = () => {
-  const [checked, setChecked] = useState<boolean>(false);
+  const [form, setForm] = useState<ExpenseType | RevenueType>({
+    id: 0,
+    releaseType: "recebimento",
+    name: "",
+    value: 0,
+    category: "Outros",
+    dateOfExpire: "",
+    inInstallments: false,
+    installmentsCount: 1,
+    installmentsStepType: "Mensalmente",
+    status: false,
+    type: "Unico",
+    reminder: false,
+  });
+
+  const changeFormValue = (
+    key: keyof ExpenseType | RevenueType,
+    value: string | number | boolean
+  ) => {
+    setForm({ ...form, [key]: value });
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {/* HEADER */}
@@ -43,27 +70,95 @@ const AddForm = () => {
 
       {/* CONTENT */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Input label="Nome" onChangeText={(text) => console.log(text)} />
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Checkbox
-            color={"#1A73E8"}
-            onChecked={function (value: boolean): void {
-              setChecked(value);
-            }}
-            checked={checked}
-            label="Teste"
+        <View style={styles.row}>
+          <Paragraph style={{ width: "100%" }}>Tipo de lançamento</Paragraph>
+          <RadioButton
+            checked={form.releaseType === "recebimento"}
+            color={""}
+            onChecked={() => changeFormValue("releaseType", "recebimento")}
+            label="Recebimento"
+            style={{ width: "45%" }}
           />
           <RadioButton
-            color={"#1A73E8"}
-            onChecked={function (value: boolean): void {
-              setChecked(value);
-            }}
-            checked={checked}
-            label="Teste"
+            checked={form.releaseType === "despesa"}
+            color={""}
+            onChecked={() => changeFormValue("releaseType", "despesa")}
+            label="Despesa"
+            style={{ width: "45%" }}
           />
-          <Button label="teste" variation="secondary" />
         </View>
-        <Button label="teste" variation="primary" rounded />
+        <Input
+          label="Nome"
+          onChangeText={(text) => changeFormValue("name", text)}
+          containerStyle={{ width: "100%" }}
+          value={form.name}
+        />
+        <Input
+          label="Valor R$"
+          onChangeText={(text) => changeFormValue("value", text)}
+          containerStyle={{ width: "45%" }}
+          keyboardType="number-pad"
+          value={form.value.toFixed(2).replace(".", ",")}
+        />
+        <Input
+          label="Data de Vencimento"
+          onChangeText={(text) => changeFormValue("dateOfExpire", text)}
+          containerStyle={{ width: "45%" }}
+          value={form.dateOfExpire}
+        />
+        <Input
+          label="Forma de pagamento"
+          onChangeText={(text) => console.log(text)}
+          containerStyle={{ width: "45%" }}
+          value={form.type}
+          picker
+          pickerTitle="Selecione um item"
+          pickerContentLayout={
+            <View>
+              <Paragraph>Test</Paragraph>
+            </View>
+          }
+        />
+        <Input
+          label="Escolha uma categoria"
+          onChangeText={(text) => console.log(text)}
+          containerStyle={{ width: "45%" }}
+          value={form.category}
+          picker
+          pickerTitle="Selecione um item"
+          pickerContentLayout={
+            <View>
+              <Paragraph>Test</Paragraph>
+            </View>
+          }
+        />
+        <Input
+          label="Tipo de parcelamento"
+          onChangeText={(text) => console.log(text)}
+          containerStyle={{ width: "45%" }}
+          value={form.installmentsStepType}
+          picker
+          pickerTitle="Selecione um item"
+          pickerContentLayout={
+            <View>
+              <Paragraph>Test</Paragraph>
+            </View>
+          }
+        />
+        <Input
+          label="Quantidade de parcelas"
+          onChangeText={(text) => console.log(text)}
+          containerStyle={{ width: "45%" }}
+          value={form.installmentsCount.toString()}
+        />
+        <Checkbox
+          checked={form.reminder}
+          label="Adicionar Lembrete"
+          color={""}
+          onChecked={() => changeFormValue("reminder", !form.reminder)}
+          style={{ width: "45%" }}
+        />
+        <Button label="Criar" variation="primary" rounded full />
       </ScrollView>
     </View>
   );
@@ -106,8 +201,17 @@ const styles = StyleSheet.create({
   contentContainer: {
     minHeight: Dimensions.get("window").height - 170,
     padding: 12,
-    gap: 12,
+    gap: 16,
     backgroundColor: "#f8f8f8",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 

@@ -1,10 +1,14 @@
 export type RevenueType = {
+  releaseType: "recebimento" | "despesa",
   id: number,
   name: string
   value: number,
-  status: boolean,
   inInstallments: boolean,
   installmentsCount: number,
   installmentsStepType: "Diariamente" | "Semanalmente" | "Mensalmente" | "Anualmente",
-  dateOfExpire: string[]
+  dateOfExpire: string
+  type: "Fixo" | "Variável" | "Unico",
+  category: "Pagamento" | "Outros",
+  status: boolean,
+  reminder: boolean
 }
